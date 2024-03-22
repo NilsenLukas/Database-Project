@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="ContactUs.css" />
+    <link rel="stylesheet" href="styleNavbar.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <div class="body">
+      <header>
+        <div id="header"></div>
+      </header>
+      <div class="contentContactUs">
+        <h3 class="headerCF">Contact Form</h3>
+
+        <div class="container">
+          <form action="#">
+            <div class="input-box">
+              <div class="input-field field">
+                <label for="fname">First Name</label>
+                <input
+                  type="text"
+                  id="fname"
+                  class="item"
+                  name="firstname"
+                  placeholder="Your name.."
+                />
+                <div class="error-txt">First name can't be blank</div>
+              </div>
+
+              <div class="input-field field">
+                <label for="lname">Last Name</label>
+                <input
+                  type="text"
+                  id="lname"
+                  class="item"
+                  name="lastname"
+                  placeholder="Your last name.."
+                />
+                <div class="error-txt">Last name can't be blank</div>
+              </div>
+
+              <div class="input-field field">
+                <label for="email">Email</label>
+                <input
+                  type="text"
+                  id="email"
+                  class="item"
+                  name="email"
+                  placeholder="YourEmail@gmail.com"
+                />
+                <div class="error-txt email">Email address can't be blank</div>
+              </div>
+
+              <div class="input-field field">
+                <label for="subject">Subject Title</label>
+                <input
+                  type="text"
+                  id="subject"
+                  class="item"
+                  name="subject"
+                  placeholder="Subject"
+                />
+                <div class="error-txt">Subject title can't be blank</div>
+              </div>
+
+              <div class="textarea-field field">
+                <label for="Message">Message</label>
+                <textarea
+                  id="message"
+                  class="item"
+                  name="Message"
+                  placeholder="Write your message here!"
+                  style="height: 200px"
+                ></textarea>
+                <div class="error-txt">Message can't be blank</div>
+              </div>
+            </div>
+            <button type="submit">Send Message</button>
+          </form>
+        </div>
+      </div>
+      `
+      <footer>
+        <div id="footer1"></div>
+      </footer>
+    </div>
+
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="ContactUs.js"></script>
+    <script>
+      $(function () {
+        $("#header").load("NavBar.html .header"); // Load the header content
+        $("#footer1").load("NavBar.html .footer1"); // Load the footer content
+      });
+    </script>
+  </body>
+</html>

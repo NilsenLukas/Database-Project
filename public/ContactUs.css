@@ -1,0 +1,93 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+body {
+  font-family: "Poppins", sans-serif; 
+  min-height: 100vh; 
+  background-image: url(Images/tanbackground1.jpeg);
+  background-size: cover;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0; 
+}
+.contentContactUs {
+  padding-top: 20px;
+}
+
+input[type="text"],
+select,
+textarea {
+  width: 100%; 
+  padding: 12px; 
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  margin-top: 6px; 
+  margin-bottom: 16px; 
+  resize: vertical; 
+}
+
+form button {
+  background-color: brown; 
+  color: white; 
+  padding: 12px 20px; 
+  border: none; 
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%; 
+  margin: 16px 0; 
+}
+
+form button:hover {
+  background-color: #bc8f8f; 
+}
+
+.container {
+  border-radius: 5px; 
+  background-color: #f2f2f2; 
+  padding: 20px; 
+  margin: 25px auto; 
+  max-width: 600px; 
+  width: auto;
+}
+.headerCF {
+  text-align: center;
+  font-size: 30px;
+}
+
+
+
+.field .item::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.field .error-txt {
+  font-size: 14.5px;
+  color: red;
+  text-align: left;
+  margin: -5px 0 10px;
+  display: none;
+}
+.field.error .error-txt{
+    display: block;
+}
+
+form .textarea-field.item {
+  resize: none;
+}
+
+form .textarea-field .error-txt {
+  margin-top: -10px;
+}
+
+@media screen and (max-width: 768px) {
+  input[type="text"],
+  select,
+  textarea {
+    width: 100%;
+    margin: 6px 0 16px;
+  }
+  .container {
+    margin: 25px 5%;
+  }
+}

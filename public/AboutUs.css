@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+body {
+  background: url(Images/FNF_AB_BG.jpeg);
+  background-size: cover;
+}
+
+.mainAB {
+  text-align: center;
+  padding: 25px;
+  padding-left: 75px;
+  padding-right: 75px;
+  font-family: "Poppins", sans-serif;
+  background-image: linear-gradient(
+    to right,
+    rgba(250, 235, 215, 0) 2%,
+    rgba(250, 235, 215, 0.8) 10%,
+    rgba(250, 235, 215, 0.8) 90%,
+    rgba(250, 235, 215, 0) 98%
+  );
+  border-radius: 15px;
+  width: 50%;
+  height: 39.5rem;
+  margin: auto;
+}
+hr {
+  border: none;
+  height: 1px;
+  background-color: black;
+  margin: 20px 0;
+}
+.content1 {
+  width: 90%;
+  padding-left: 9rem;
+  padding-bottom: 5px;
+}
