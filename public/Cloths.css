@@ -1,0 +1,86 @@
+.clothes-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    gap: 20px; /* Space between grid items */
+    padding: 20px; /* Padding around the grid */
+    max-width: 1200px; /* Maximum width of the grid container */
+    margin: 0 auto; /* Center the grid container */
+}
+
+.clothes-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+    text-align: center; /* Center text */
+    background: #fff; /* Background color for the item */
+    border-radius: 10px; /* Rounded corners for the item */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle depth effect */
+    overflow: hidden; /* Ensure the content does not overflow */
+    transition: all 0.3s ease; /* Smooth transition for any changes */
+}
+
+.clothes-item img {
+    width: 100%; /* Make image full width of the item */
+    border-top-left-radius: 10px; /* Rounded corners for the image */
+    border-top-right-radius: 10px;
+    transition: transform 0.3s ease; /* Smooth transform transition */
+}
+
+.clothes-item:hover img {
+    transform: scale(1.05); /* Scale up the image slightly on hover */
+}
+
+.clothes-item h3 {
+    margin: 10px 0; /* Margin around the title for spacing */
+}
+
+.expanded-info {
+    display: none; 
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; 
+    background-color: white;
+    z-index: 10;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.add-to-cart {
+    background: rgb(167, 81, 68);
+    color: white; /* White text color */
+    border: none; /* No border */
+    padding: 10px 20px; /* Padding for the button */
+    margin-top: 20px; /* Margin at the top */
+    border-radius: 5px; /* Slightly rounded corners for the button */
+    cursor: pointer; /* Cursor for the button */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Box shadow for the button */
+}
+
+.add-to-cart:hover{
+    background: #9a5f4d;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 1.5rem; /* Larger font size for the close button */
+    color: #333; /* Color for the close button */
+}
+
+.add-to-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: #f0f0f0; /* Light grey background color */
+    /* ... other styles ... */
+}
+.info{
+    padding-top: 20px;
+}

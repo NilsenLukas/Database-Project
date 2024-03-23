@@ -19,30 +19,37 @@ const User = mongoose.model('User', userSchema);
 //Define Item Schema
 const itemSchema = new mongoose.Schema({
     productID: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
     color: { type: String, required: true }, 
     price: { type: String, required: true },
     size: { type: String, required: true },
     stock: { type: String, required: true },
-    description: { type: String, required: false }
+    description: { type: String, required: true },
+    image: { type: String, required: true }
 });
 // Create a item Model
 const Item = mongoose.model('Item', itemSchema);
 
-//Define Order Schema
+//define Order Schema
 const orderSchema = new mongoose.Schema({
-    orderID: { type: String, required: true, unique: true },
-    productID: { type: String, required: true },
+    productIDList: [{ type: mongoose.Schema.Types.ObjectId, ref: 'OrderItem' }], 
     email: { type: String, required: true }, 
-    date: { type: String, required: true },
-    quantity: { type: String, required: true },
+    date: { type: Date, default: Date.now},
     shipAddress: { type: String, required: true },
     shipAptNum: { type: String, required: true },
     shipCity: { type: String, required: true },
     shipState: { type: String, required: true },
     shipZip: { type: String, required: true }
 });
-// Create a order Model
+//Create a order Model
 const Order = mongoose.model('Order', orderSchema);
+
+//productIDList Schema
+const orderItemSchema = new mongoose.Schema({
+    productID: { type: String, required: true },
+    quantity: { type: Number, required: true }
+})
+const OrderItem = mongoose.model('OrderItem', orderItemSchema);
 
 // Function to add a new user
 async function addNewUser(email, password, fName,lName, address, aptNum, city, state, zip, status) {
@@ -78,8 +85,8 @@ async function removeUser(email){
 }
 
 // Function to add a new item
-async function addNewItem(productID, color, price, size, stock, description) {
-    const newItem = new Item({ productID, color, price, size, stock, description });
+async function addNewItem(productID, name, color, price, size, stock, description, image) {
+    const newItem = new Item({ productID, name, color, price, size, stock, description, image });
     try {
     const savedItem = await newItem.save();
     console.log('Item created successfully:', savedItem);
@@ -144,14 +151,21 @@ async function removeOrder(orderID){
 //removeUser('Admin2');
 //removeUser('Admin2');
 
-//addNewItem('1', 'blue', '10', 'M', '10', 'blue shirt');
-//addNewItem('2', 'red', '15', 'L', '5', 'red shirt');
-//addNewItem('3', 'green', '20', 'S', '3', 'green shirt');
+// removeItem('1');
+// removeItem('2');
+// removeItem('3');
+//removeItem('4');
+
+// addNewItem('1', 'BlackT', 'black', '10', 'M', '10', 'black shirt', 'BlackTshirtTemplate.jpeg');
+// addNewItem('2', 'Cargo Pants', 'tan', '15', 'L', '5', 'Cargo pants', 'CargoPantsTemplate.jpeg');
+// addNewItem('3', 'Jeans','blue', '20', 'S', '3', 'Jeans', 'JeansTemplate.jpeg');
+addNewItem('4', 'WhiteT', 'white', '10', 'M', '10', 'white shirt', 'whiteTtemplate.jpeg');
+
 
 //addNewOrder('1', '1', 'Admin', '2021-01-01', '1', '1234 Main St', 'Apt 1', 'City', 'State', '12345');
 //addNewOrder('2', '2', 'Admin', '2021-01-01', '2', '1234 Main St', 'Apt 1', 'City', 'State', '12345');
 
-//removeItem('10');
+
 
 //removeOrder('2');
 

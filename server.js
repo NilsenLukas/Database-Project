@@ -69,6 +69,16 @@ app.post('/logout', (req, res) => {
     });
 });
 
+app.get('/api/clothes', async (req, res) => {
+    try {
+        const items = await Item.find({});
+        res.json(items);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
+
 app.get('/session-info', (req, res) => {
     if (req.session.userId) {
         res.json({ loggedIn: true, isAdmin: req.session.status === 'Admin' });
@@ -80,3 +90,5 @@ app.get('/session-info', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
+
+
