@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <p>${cloth.description}</p>
                             <p>Color: ${cloth.color}</p>
                             <p>Size: ${cloth.size}</p>
+                            <p>Stock left: ${cloth.stock}</p>
                         </div>
 
                         <button class="add-to-cart">Add to Cart</button> <!-- Placeholder -->
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         addToListBox.innerHTML = `<h3>Add to List</h3>`;
 
                         addToListBox.addEventListener('click', () => {
-                            window.location.href = 'addCloths.html';
+                            window.location.href = 'AdminPage.html';
                         });
 
                         clothesContainer.appendChild(addToListBox);

@@ -154,12 +154,22 @@ async function removeOrder(orderID){
 // removeItem('1');
 // removeItem('2');
 // removeItem('3');
-//removeItem('4');
+// removeItem('4');
 
-// addNewItem('1', 'BlackT', 'black', '10', 'M', '10', 'black shirt', 'BlackTshirtTemplate.jpeg');
+//addNewItem('1', 'BlackT', 'black', '10', 'M', '10', 'black shirt', 'BlackTshirtTemplate.jpeg');
 // addNewItem('2', 'Cargo Pants', 'tan', '15', 'L', '5', 'Cargo pants', 'CargoPantsTemplate.jpeg');
 // addNewItem('3', 'Jeans','blue', '20', 'S', '3', 'Jeans', 'JeansTemplate.jpeg');
-addNewItem('4', 'WhiteT', 'white', '10', 'M', '10', 'white shirt', 'whiteTtemplate.jpeg');
+//addNewItem('4', 'WhiteT', 'white', '10', 'M', '10', 'white shirt', 'whiteTtemplate.jpeg');
+// addNewItem('1', 'Yellow Shirt', 'Yellow', '10', 'M', '10', 'Yellow T-shirt', 'Yellow_T.png');
+// addNewItem('2', 'Blue Shirt', 'Blue', '15', 'M', '10', 'Blue long sleeve shirt', 'Blue_Shirt.png');
+// addNewItem('3', 'Pink Flannel', 'Pink', '35', 'M', '10', 'Pink and white plaid flannel', 'Pink_Flannel.png');
+// addNewItem('4', 'Grey Hoodie', 'Grey', '45', 'M', '10', 'Thick grey shirt with a hood and pocket', 'Grey_Hoodie.png');
+// addNewItem('5', 'Red Sweatshirt', 'Red', '40', 'M', '10', 'Thick red shirt', 'Red_Hoodie.png');
+// addNewItem('6', 'Blue Jacket', 'Blue', '50', 'M', '10', 'Blue jacket with collar, buttons, and pockets', 'Blue_jacket.png');
+// addNewItem('7', 'Tan Jacket', 'Tan', '50', 'M', '10', 'Tan V-neck with buttons', 'Tan_Jacket.png');
+// addNewItem('8', 'Brown Jacket', 'Brown', '60', 'M', '10', 'Heavy jacket with hood and buttons', 'Brown_Jacket.png');
+// addNewItem('9', 'Jeans', 'Blue', '35', 'M', '10', 'Blue Jeans with cuffed bottoms', 'Blue_Jeans.png');
+//addNewItem('10', 'Blue Shirt', 'Blue', '15', 'M', '10', 'Blue long sleeve shirt', 'Blue_Shirt.png');
 
 
 //addNewOrder('1', '1', 'Admin', '2021-01-01', '1', '1234 Main St', 'Apt 1', 'City', 'State', '12345');

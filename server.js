@@ -14,8 +14,8 @@ const mongoURI = "mongodb+srv://lagt123456:rxOtJH3fuh6uSyAx@faithnfabrics.7cui0e
 
 // Establish MongoDB Connection
 mongoose.connect(mongoURI, {})
-  .then(() => console.log('MongoDB connection established successfully'))
-  .catch(err => console.error('MongoDB connection error:', err));
+    .then(() => console.log('MongoDB connection established successfully'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
 app.use(cors());
 app.use(bodyParser.json());
