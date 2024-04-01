@@ -1,0 +1,48 @@
+.account-options-panel {
+    /* existing styles */
+    gap: 10px;
+}
+
+.account-option {
+    padding: 10px 20px;
+    border: 1px solid #ccc; /* Border color */
+    background-color: #fff; /* Background color */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s; /* Smooth background transition */
+}
+
+.account-option.active {
+    background-color: #007bff; /* Active state background color */
+    color: #fff; /* Active state text color */
+}
+
+/* Hover effect for buttons */
+.account-option:hover:not(.active) {
+    background-color: #f0f0f0; /* Hover state background color */
+}
+
+.account-info-section {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.account-info-section h2 {
+    text-align: center;
+    color: #333;
+}
+
+.user-info p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 10px 0;
+}
+
+.user-info p strong {
+    font-weight: bold;
+}
+

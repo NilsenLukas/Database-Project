@@ -1,41 +1,46 @@
-
-
 document.addEventListener('DOMContentLoaded', () => {
     fetch('/session-info')
         .then(response => response.json())
         .then(data => {
-            if (data.loggedIn){
-                const accountText = "Account" + (data.isAdmin ? " A" : " ✓");
-                document.getElementById("account-nav").textContent = accountText;
+            const navbar = document.querySelector('.navbar'); // Ensure this selector targets your navbar element
+
+            let linksHtml = `
+                <a href="Cloths.html">Clothes</a>
+                <a href="AboutUs.html">About</a>
+                <a href="ContactUs.html">Contact Us</a>
+            `;
+
+            if (data.loggedIn) {
+                // If logged in, add Account and Logout links
+                linksHtml += `<a href="Account.html">Account</a>`;
+                //linksHtml += `<a href="#" id="logout-link">Logout</a>`;
+            } else {
+                // If not logged in, show Login/Signup link
+                linksHtml += `<a href="login.html">Login / Signup</a>`;
+            }
+
+            navbar.innerHTML = linksHtml;
+
+            // Attach event handler to logout link if it exists
+            const logoutLink = document.getElementById('logout-link');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    fetch('/logout', { method: 'POST' })
+                        .then(response => {
+                            if (response.ok) {
+                                window.location.href = 'login.html';
+                            } else {
+                                throw new Error('Logout failed');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                });
             }
         })
-        .catch(error => console.error('Error fetching session info:', error));
-
-    const logoutButton = document.getElementById("logout");
-    if (logoutButton) {
-        logoutButton.addEventListener("click", async () => {
-            try {
-                const response = await fetch('/logout', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                const data = await response.json();
-                
-                if (response.ok) {
-                    // Logout successful, redirect to login page or homepage
-                    window.location.href = '/login.html'; // Adjust the URL as needed
-                    const accountText = "Account";
-                    document.getElementById("account-nav").textContent = accountText;
-                } else {
-                    // Handle logout failure (e.g., show an error message)
-                    console.error('Logout failed:', data.message);
-                }
-            } catch (error) {
-                console.error('Error making fetch request:', error);
-            }
+        .catch(error => {
+            console.error('Error fetching session info:', error);
         });
-    }
 });
-

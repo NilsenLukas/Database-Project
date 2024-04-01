@@ -5,26 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Account Page</title>
     <link rel="stylesheet" href="styleNavbar.css" />
+    <link rel="stylesheet" href="Account.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="NavBar.js"></script>
+    <script src="Account.js"></script>
   </head>
   <body>
     <header>
-      <!-- Use either class or id, depending on what you choose in NavBar.html -->
       <div id="header"></div>
     </header>
 
-    <div class="main">
-      <p>"bunch of typing"</p>
-      <a href="Cart.html">View Cart</a>
-      <a href="login.html">Login Page</a>
-      <button id="logout">Logout</button>
+    <!-- Secondary Account Options Panel -->
+    <div class="account-options-panel">
+      <!-- Buttons will be dynamically added here by Account.js -->
+    </div>
+
+    <!-- Account Sections -->
+    <!-- Logout Section -->
+    <div class="logout-section" style="display: none">
+      <!-- Content for logout -->
+      <a href="login.html">Logout</a>
+    </div>
+
+    <!-- Account Info Section -->
+    <div class="account-info-section" style="display: none">
+      <!-- Content for account info -->
+    </div>
+
+    <!-- Order History Section -->
+    <div class="order-history-section" style="display: none">
+      <!-- Content for order history -->
+    </div>
+
+    <!-- Admin Page Section (only for admins) -->
+    <div class="admin-page-section" style="display: none">
+      <!-- Content for admin page -->
     </div>
 
     <footer>
       <div id="footer1"></div>
     </footer>
-    <!-- Separate script tag for your custom script -->
     <script>
       $(function () {
         $("#header").load("NavBar.html .header"); // Load the header content

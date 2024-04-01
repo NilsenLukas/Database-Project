@@ -34,15 +34,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
-app.post('/create-account', async (req, res) => {
-    const { email, password, fName, lName } = req.body;
-    try {
-        await addNewUser(email, password, fName, lName, '', '', '', '', '', 'User');
-        res.json({ message: 'Account created successfully'});
-    } catch (error) {
-        res.status(500).json({ message: 'Failed to create account', error: error.message });
-    }
-});
 
 app.post('/login', async (req, res) => { 
     const { email, password } = req.body;
@@ -63,11 +54,14 @@ app.post('/login', async (req, res) => {
 app.post('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
-            return res.status(500).json({ message: 'Could not log out' });
+            return res.status(500).send('Could not log out.');
         }
-        res.json({ message: 'Logged out successfully' });
+        res.clearCookie('connect.sid'); // This assumes you're using the default session cookie name.
+        return res.redirect('/login.html'); // Redirect to login page after logout
     });
 });
+
+
 
 app.get('/api/clothes', async (req, res) => {
     try {
@@ -78,6 +72,33 @@ app.get('/api/clothes', async (req, res) => {
     }
 });
 
+app.get('/api/user-info', (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ message: 'Not logged in' });
+    }
+
+    User.findById(req.session.userId, 'email fName lName address aptNum city state zip -_id')
+        .then(user => {
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            res.json(user);
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ message: 'Server error', error: err.message });
+        });
+});
+
+app.post('/create-account', async (req, res) => {
+    const { email, password, fName, lName } = req.body;
+    try {
+        await addNewUser(email, password, fName, lName, '', '', '', '', '', 'User');
+        res.json({ message: 'Account created successfully'});
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to create account', error: error.message });
+    }
+});
 
 app.get('/session-info', (req, res) => {
     if (req.session.userId) {
