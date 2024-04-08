@@ -32,14 +32,16 @@ const Item = mongoose.model('Item', itemSchema);
 
 //define Order Schema
 const orderSchema = new mongoose.Schema({
+    orderID: { type: Number, required: true, unique: true },
     productIDList: [{ type: mongoose.Schema.Types.ObjectId, ref: 'OrderItem' }], 
     email: { type: String, required: true }, 
     date: { type: Date, default: Date.now},
-    shipAddress: { type: String, required: true },
-    shipAptNum: { type: String, required: true },
-    shipCity: { type: String, required: true },
-    shipState: { type: String, required: true },
-    shipZip: { type: String, required: true }
+    shipAddress: { type: String, required: false },
+    shipAptNum: { type: String, required: false },
+    shipCity: { type: String, required: false },
+    shipState: { type: String, required: false },
+    shipZip: { type: String, required: false },
+    isComplete: { type: Boolean, required: true, default: false },
 });
 //Create a order Model
 const Order = mongoose.model('Order', orderSchema);
@@ -183,6 +185,7 @@ module.exports = {
     User, 
     Item,
     Order,
+    OrderItem,
     addNewUser,
     removeUser,
     addNewItem,

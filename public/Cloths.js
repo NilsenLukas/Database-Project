@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <p>Stock left: ${cloth.stock}</p>
                         </div>
 
-                        <button class="add-to-cart">Add to Cart</button> <!-- Placeholder -->
+                        <button class="add-to-cart" data-product-id="${cloth.productID}">Add to Cart</button>
                     </div>
                 `;
 
@@ -52,5 +52,37 @@ document.addEventListener('DOMContentLoaded', () => {
                         clothesContainer.appendChild(addToListBox);
                     }
                 });
+        });
+
+        clothesContainer.addEventListener('click', function(event) {
+            // Check if the clicked element has the "add-to-cart" class
+            if (event.target && event.target.classList.contains('add-to-cart')) {
+                const productId = event.target.getAttribute('data-product-id');
+                console.log("Add to Cart button clicked for product ID:", productId);
+    
+                // Proceed with the fetch request to add the item to the cart
+                fetch('/api/add-to-cart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ productId, quantity: 1 }) // Assuming quantity is 1 for simplicity
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to add item to cart');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data.message); // Assuming the server sends back a confirmation message
+                    alert('Item added to cart');
+                    // Optionally update the cart display here
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error adding item to cart');
+                });
+            }
         });
 });

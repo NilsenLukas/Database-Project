@@ -1,9 +1,14 @@
 .account-options-panel {
     /* existing styles */
     gap: 10px;
+
+    justify-content: center;
+    align-items: center;
 }
 
 .account-option {
+    
+    
     padding: 10px 20px;
     border: 1px solid #ccc; /* Border color */
     background-color: #fff; /* Background color */
@@ -17,7 +22,6 @@
     color: #fff; /* Active state text color */
 }
 
-/* Hover effect for buttons */
 .account-option:hover:not(.active) {
     background-color: #f0f0f0; /* Hover state background color */
 }
@@ -44,5 +48,27 @@
 
 .user-info p strong {
     font-weight: bold;
+}
+
+.cart-section {
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    /*border-bottom: 1px solid #ddd;
+    padding: 10px 0;*/
+}
+
+.remove-item-btn {
+    cursor: pointer;
+    color: grey;
+    margin-right: 10px;
+    font-size: 16px;
 }
 
