@@ -54,21 +54,18 @@ const orderItemSchema = new mongoose.Schema({
 const OrderItem = mongoose.model('OrderItem', orderItemSchema);
 
 // Function to add a new user
-async function addNewUser(email, password, fName,lName, address, aptNum, city, state, zip, status) {
-  // Ideally, hash the password here with bcrypt or a similar library before saving
+async function addNewUser(email, password, fName, lName, address, aptNum, city, state, zip, status) {
     const newUser = new User({ email, password, fName, lName, address, aptNum, city, state, zip, status });
     try {
-    const savedUser = await newUser.save();
-    console.log('User created successfully:', savedUser);
+        const savedUser = await newUser.save();
+        console.log('User created successfully:', savedUser);
+        return savedUser;  
     } catch (error) {
-        if (error.code === 11000){
-            console.log("User already exists");
-        }
-        else{
-            console.error('Error creating user:', error);
-        }
+        console.error('Error creating user:', error);
+        throw error;  
     }
 }
+
 
 // Function to remove a user given user email
 async function removeUser(email){

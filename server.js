@@ -12,7 +12,7 @@ const app = express();
 const port = 5500;
 const mongoURI = "mongodb+srv://lagt123456:rxOtJH3fuh6uSyAx@faithnfabrics.7cui0e8.mongodb.net/mydatabase?retryWrites=true&w=majority";
 
-// Establish MongoDB Connection
+// MongoDB Connection
 mongoose.connect(mongoURI, {})
     .then(() => console.log('MongoDB connection established successfully'))
     .catch(err => console.error('MongoDB connection error:', err));
@@ -56,8 +56,8 @@ app.post('/logout', (req, res) => {
         if (err) {
             return res.status(500).send('Could not log out.');
         }
-        res.clearCookie('connect.sid'); // This assumes you're using the default session cookie name.
-        return res.redirect('/login.html'); // Redirect to login page after logout
+        res.clearCookie('connect.sid'); 
+        return res.redirect('/login.html'); 
     });
 });
 
@@ -244,15 +244,47 @@ app.get('/api/user-info', (req, res) => {
         });
 });
 
+// Endpoint to update user information
+app.post('/api/update-user-info', async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).send('User not logged in');
+    }
+
+    const { fName, lName, address, aptNum, city, state, zip, password } = req.body;
+    try {
+        const updateData = { fName, lName, address, aptNum, city, state, zip };
+
+        // Optionally update password if provided and not empty
+        if (password && password.trim() !== '') {
+            // Here you should ideally hash the password before storing
+            updateData.password = password;  // Consider using bcrypt to hash the password
+        }
+
+        await User.findByIdAndUpdate(req.session.userId, updateData, { new: true });
+        res.json({ message: 'User information updated successfully' });
+    } catch (error) {
+        console.error('Error updating user information:', error);
+        res.status(500).send('Error updating user information');
+    }
+});
+
+
 app.post('/create-account', async (req, res) => {
     const { email, password, fName, lName } = req.body;
     try {
-        await addNewUser(email, password, fName, lName, '', '', '', '', '', 'User');
-        res.json({ message: 'Account created successfully'});
+        const newUser = await addNewUser(email, password, fName, lName, '', '', '', '', '', 'User');
+        req.session.userId = newUser._id;
+        req.session.status = newUser.status; 
+        res.json({ message: 'Account created successfully', loggedIn: true });
     } catch (error) {
-        res.status(500).json({ message: 'Failed to create account', error: error.message });
+        if (error.code === 11000) {
+            res.status(409).json({ message: 'Email already exists' });
+        } else {
+            res.status(500).json({ message: 'Failed to create account', error: error.message });
+        }
     }
 });
+
 
 app.get('/session-info', (req, res) => {
     if (req.session.userId) {

@@ -121,28 +121,86 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
     // Fetch and display user info for the account info section
-    fetch('/api/user-info')
-    .then(response => response.json())
-    .then(userInfo => {
-        displayUserInfo(userInfo);
-    })
-    .catch(error => console.error('Error fetching user info:', error));
+fetch('/api/user-info')
+.then(response => response.json())
+.then(userInfo => {
+    document.getElementById('email').value = userInfo.email;
+    document.getElementById('fName').value = userInfo.fName;
+    document.getElementById('lName').value = userInfo.lName;
+    document.getElementById('address').value = userInfo.address;
+    document.getElementById('aptNum').value = userInfo.aptNum;
+    document.getElementById('city').value = userInfo.city;
+    document.getElementById('state').value = userInfo.state;
+    document.getElementById('zip').value = userInfo.zip;
+    
+    // Set up listeners to detect changes
+    ['fName', 'lName', 'address', 'aptNum', 'city', 'state', 'zip', 'password'].forEach(id => {
+        document.getElementById(id).addEventListener('change', () => {
+            document.getElementById('update-info-btn').style.display = 'block';
+        });
+    });
 
-    // Function to display user info in the account info section
-    function displayUserInfo(userInfo) {
-        const accountInfoSection = document.querySelector('.account-info-section');
-        if (accountInfoSection) {
-            accountInfoSection.innerHTML = `
-                <h2>Account Information</h2>
-                <p><strong>Email:</strong> ${userInfo.email}</p>
-                <p><strong>First Name:</strong> ${userInfo.fName}</p>
-                <p><strong>Last Name:</strong> ${userInfo.lName}</p>
-                <p><strong>Address:</strong> ${userInfo.address}</p>
-                <p><strong>Apartment Number:</strong> ${userInfo.aptNum}</p>
-                <p><strong>City:</strong> ${userInfo.city}</p>
-                <p><strong>State:</strong> ${userInfo.state}</p>
-                <p><strong>Zip Code:</strong> ${userInfo.zip}</p>
-            `;
+    // Setup the update information button click event
+    document.getElementById('update-info-btn').addEventListener('click', updateUserInfo);
+})
+.catch(error => console.error('Error fetching user info:', error));
+
+// Function to update user info
+function updateUserInfo() {
+    const userInfo = {
+        fName: document.getElementById('fName').value.trim(),
+        lName: document.getElementById('lName').value.trim(),
+        address: document.getElementById('address').value.trim(),
+        aptNum: document.getElementById('aptNum').value.trim(),
+        city: document.getElementById('city').value.trim(),
+        state: document.getElementById('state').value.trim(),
+        zip: document.getElementById('zip').value.trim(),
+        password: document.getElementById('password').value
+    };
+
+    // Remove empty fields to prevent unnecessary updates, especially if passwords are involved
+    Object.keys(userInfo).forEach(key => {
+        if (!userInfo[key]) delete userInfo[key];
+    });
+
+    fetch('/api/update-user-info', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userInfo)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok.');
         }
+        return response.json();
+    })
+    .then(data => {
+        // Display a success message
+        showMessage('Information updated successfully', 'success');
+        document.getElementById('update-info-btn').style.display = 'none'; // Hide the update button after successful update
+    })
+    .catch(error => {
+        console.error('Error updating user info:', error);
+        // Display an error message
+        showMessage('Failed to update information', 'error');
+    });
+}
+
+function showMessage(message, type) {
+    const messageContainer = document.querySelector('.message-container');
+    if (!messageContainer) {
+        console.error('Message container not found');
+        return;
     }
+    const messageElement = document.createElement('div');
+    messageElement.textContent = message;
+    messageElement.className = `alert alert-${type}`; // Assuming Bootstrap or similar for styling
+    messageContainer.innerHTML = ''; // Clear previous messages
+    messageContainer.appendChild(messageElement);
+
+    // Automatically remove the message after 4 seconds
+    setTimeout(() => {
+        messageElement.remove();
+    }, 4000);
+}
 });
