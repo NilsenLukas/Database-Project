@@ -120,6 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
 
+
+
     // Fetch and display user info for the account info section
 fetch('/api/user-info')
 .then(response => response.json())
@@ -203,4 +205,132 @@ function showMessage(message, type) {
         messageElement.remove();
     }, 4000);
 }
+
+document.getElementById('checkout-form').addEventListener('submit', function(e) {
+    e.preventDefault();  // Prevent the default form submission
+
+    var formData = {
+        shipAddress: document.querySelector('[name="shipAddress"]').value,
+        shipAptNum: document.querySelector('[name="shipAptNum"]').value,
+        shipCity: document.querySelector('[name="shipCity"]').value,
+        shipState: document.querySelector('[name="shipState"]').value,
+        shipZip: document.querySelector('[name="shipZip"]').value
+    };
+
+    fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Checkout failed');
+        return response.json();
+    })
+    .then(data => {
+        alert('Checkout successful!');
+        window.location.reload();
+    })
+    .catch(error => {
+        console.error('Error during checkout:', error);
+        alert('Checkout failed. Please try again.');
+    });
+});
+
+
+
+function displayOrderHistory() {
+    fetch('/api/order-history', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch order history');
+        }
+        return response.json();
+    })
+    .then(orders => {
+        const orderHistoryList = document.getElementById('order-history-list');
+        orderHistoryList.innerHTML = ''; // Clear previous entries
+
+        orders.forEach(order => {
+            const orderEntry = document.createElement('div');
+            orderEntry.className = "order-entry";
+            orderEntry.innerHTML = `
+                <h3>Order ID: ${order.orderID} - ${((order.isComplete === true || order.isComplete === 'true')) ? 'Active' : 'Finished'}</h3>
+                <p>Date: ${new Date(order.date).toLocaleDateString()}</p>
+                <p>Address: ${order.shipAddress}, ${order.shipAptNum}, ${order.shipCity}, ${order.shipState}, ${order.shipZip}</p>
+                <p>Items: ${order.items.join(', ')}</p>
+            `;
+            orderHistoryList.appendChild(orderEntry);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching order history:', error);
+        alert('Error fetching order history: ' + error.message);
+    });
+}
+
+
+function displayOrderHistory() {
+    fetch('/api/order-history', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch order history');
+        }
+        return response.json();
+    })
+    .then(orders => {
+        const orderHistoryList = document.getElementById('order-history-list');
+        orderHistoryList.innerHTML = ''; // Clear previous entries
+
+        orders.forEach(order => {
+            const orderEntry = document.createElement('div');
+            orderEntry.className = "order-entry";
+            orderEntry.innerHTML = `
+                <h3>Order ID: ${order.orderID} - ${order.isComplete ? 'Finished' : 'Active'}</h3>
+                <p>Date: ${new Date(order.date).toLocaleDateString()}</p>
+                <p>Address: ${order.shipAddress}, ${order.shipAptNum}, ${order.shipCity}, ${order.shipState}, ${order.shipZip}</p>
+                <p>Items: ${order.items.join(', ')}</p>
+            `;
+            orderHistoryList.appendChild(orderEntry);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching order history:', error);
+        alert('Error fetching order history: ' + error.message);
+    });
+}
+
+
+
+function showSection(activeSection) {
+    const sections = {
+        accountInfo: document.querySelector('.account-info-section'),
+        cart: document.querySelector('.cart-section'),
+        orderHistory: document.querySelector('.order-history-section'),
+        adminPage: document.querySelector('.admin-page-section')
+    };
+
+    // Hide all sections
+    Object.values(sections).forEach(section => section.style.display = 'none');
+
+    // Show the active section
+    if (sections[activeSection]) {
+        sections[activeSection].style.display = 'block';
+        if (activeSection === 'cart') {
+            displayCart();  // Refresh the cart contents
+        } else if (activeSection === 'orderHistory') {
+            displayOrderHistory();  // Load and display the order history
+        }
+    }
+}
+
+
+
 });

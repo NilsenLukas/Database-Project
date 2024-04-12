@@ -181,15 +181,11 @@ app.post('/api/start-new-order', async (req, res) => {
     try {
         // Get the next orderID
         const nextOrderID = await getNextOrderID();
-
-        // Create a new order with the next orderID
         const newOrder = new Order({
             orderID: nextOrderID,
-            // Set other order fields as necessary
             email: req.session.userId,
             productIDList: [],
             isComplete: false,
-            // Add other required fields as per your schema
         });
 
         await newOrder.save();
@@ -265,6 +261,75 @@ app.post('/api/update-user-info', async (req, res) => {
     } catch (error) {
         console.error('Error updating user information:', error);
         res.status(500).send('Error updating user information');
+    }
+});
+
+app.post('/api/checkout', async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).send('User not logged in');
+    }
+
+    const { shipAddress, shipAptNum, shipCity, shipState, shipZip } = req.body;
+
+    try {
+        const updatedOrder = await Order.findOneAndUpdate(
+            { email: req.session.userId, isComplete: false },
+            {
+                shipAddress,
+                shipAptNum,
+                shipCity,
+                shipState,
+                shipZip,
+                isComplete: true 
+            },
+            { new: true }
+        );
+
+        if (!updatedOrder) {
+            return res.status(404).send('No active cart found');
+        }
+
+        res.json({ message: 'Checkout successful', order: updatedOrder });
+    } catch (error) {
+        console.error('Error during checkout:', error);
+        res.status(500).send('Error during checkout');
+    }
+});
+
+
+
+
+
+app.get('/api/order-history', async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).send('User not logged in');
+    }
+
+    try {
+        let query = { email: req.session.userId }; // Adjusted for user-specific orders
+        const orders = await Order.find(query)
+            .populate({
+                path: 'productIDList',
+                populate: { path: 'productID', model: 'Item' }
+            })
+            .sort({ date: -1 });
+
+        const formattedOrders = orders.map(order => ({
+            orderID: order.orderID,
+            date: order.date,
+            shipAddress: order.shipAddress,
+            shipAptNum: order.shipAptNum,
+            shipCity: order.shipCity,
+            shipState: order.shipState,
+            shipZip: order.shipZip,
+            isComplete: order.isComplete ? 'Finished' : 'Active',
+            items: order.productIDList.map(item => `${item.productID.name} (x${item.quantity})`)
+        }));
+
+        res.json(formattedOrders);
+    } catch (error) {
+        console.error('Error retrieving order history:', error);
+        res.status(500).send('Error retrieving order history');
     }
 });
 

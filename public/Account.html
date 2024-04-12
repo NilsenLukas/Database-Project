@@ -67,63 +67,30 @@
       <div class="row">
         <div class="col-75">
           <div class="container">
-            <form action="/action_page.php">
+            
               <div class="row">
                 <div class="col-50">
                   <h3>Billing Address</h3>
-                  <label for="fname"><i class="fa fa-user"></i> Full Name</label>
-                  <input
-                    type="text"
-                    id="fname"
-                    name="firstname"
-                    placeholder="John M. Doe"
-                  />
-                  <label for="email"><i class="fa fa-envelope"></i> Email</label>
-                  <input
-                    type="text"
-                    id="email"
-                    name="email"
-                    placeholder="john@example.com"
-                  />
-                  <label for="adr"
-                    ><i class="fa fa-address-card-o"></i> Address</label
-                  >
-                  <input
-                    type="text"
-                    id="adr"
-                    name="address"
-                    placeholder="542 W. 15th Street"
-                  />
-                  <label for="city"><i class="fa fa-institution"></i> City</label>
-                  <input
-                    type="text"
-                    id="city"
-                    name="city"
-                    placeholder="New York"
-                  />
-  
-                  <div class="row">
-                    <div class="col-50">
-                      <label for="state">State</label>
-                      <input
-                        type="text"
-                        id="state"
-                        name="state"
-                        placeholder="NY"
-                      />
-                    </div>
-                    <div class="col-50">
-                      <label for="zip">Zip</label>
-                      <input
-                        type="text"
-                        id="zip"
-                        name="zip"
-                        placeholder="10001"
-                      />
-                    </div>
+                  <form id="checkout-form">
+                    <label for="shipFName"><i class="fa fa-user"></i> First name</label>
+                    <input type="text" name="shipFName" placeholder="Adam" required>
+                    <label for="shipLName"><i class="fa fa-user"></i> Last name</label>
+                    <input type="text" name="shipLName" placeholder="Adam" required>
+                    <label for="shipAddress"><i class="fa fa-user"></i> Address:</label>
+                    <input type="text" name="shipAddress" placeholder="1234 Main St" required>
+                    <label for="shipAptNum"><i class="fa fa-envelope"></i> Apt Number </label>
+                    <input type="text" name="shipAptNum" placeholder="Apt 101">
+                    <label for="shipCity"><i class="fa fa-address-card-o"></i> City</label>
+                    <input type="text" name="shipCity" placeholder="New York" required>
+                    <label for="shipState"><i class="fa fa-address-card-o"></i> State</label>
+                    <input type="text" name="shipState" placeholder="NY" required>
+                    <label for="shipZip"><i class="fa fa-address-card-o"></i> Zipcode</label>
+                    <input type="text" name="shipZip" placeholder="10001" required>
+                    <button class="btn-checkout" type="submit" id="checkout-button">Checkout</button>
                   </div>
                 </div>
   
+                <!--
                 <div class="col-50">
                   <h3>Payment</h3>
                   <label for="fname">Accepted Cards</label>
@@ -170,10 +137,9 @@
                     </div>
                   </div>
                 </div>
+              -->
               </div>
-  
-              <input type="submit" value="Continue to checkout" class="btn" />
-            </form>
+            
           </div>
         </div>
 
@@ -181,9 +147,12 @@
     </div>
 
     <!-- Order History Section -->
-    <div class="order-history-section" style="display: none">
-      <!-- Content for order history -->
-    </div>
+    <div class="order-history-section" style="display:none;">
+      <h2>Order History</h2>
+      <div id="order-history-list">
+          <!-- Order entries will be populated here dynamically -->
+      </div>
+  </div>
 
     <!-- Admin Page Section (only for admins) -->
     <div class="admin-page-section" style="display: none">
