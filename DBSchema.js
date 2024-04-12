@@ -33,9 +33,9 @@ const Item = mongoose.model('Item', itemSchema);
 //define Order Schema
 const orderSchema = new mongoose.Schema({
     orderID: { type: Number, required: true, unique: true },
-    productIDList: [{ type: mongoose.Schema.Types.ObjectId, ref: 'OrderItem' }], 
-    email: { type: String, required: true }, 
-    date: { type: Date, default: Date.now},
+    productIDList: [{ type: mongoose.Schema.Types.ObjectId, ref: 'OrderItem' }],
+    email: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, 
+    date: { type: Date, default: Date.now },
     shipAddress: { type: String, required: false },
     shipAptNum: { type: String, required: false },
     shipCity: { type: String, required: false },

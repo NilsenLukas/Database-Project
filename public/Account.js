@@ -251,26 +251,30 @@ function displayOrderHistory() {
         return response.json();
     })
     .then(orders => {
+        console.log("Received orders: ", orders);
         const orderHistoryList = document.getElementById('order-history-list');
-        orderHistoryList.innerHTML = ''; // Clear previous entries
-
+        orderHistoryList.innerHTML = '';
         orders.forEach(order => {
             const orderEntry = document.createElement('div');
             orderEntry.className = "order-entry";
             orderEntry.innerHTML = `
-                <h3>Order ID: ${order.orderID} - ${((order.isComplete === true || order.isComplete === 'true')) ? 'Active' : 'Finished'}</h3>
+                <h3>Order ID: ${order.orderID} - ${order.isComplete ? 'Finished' : 'Active'}</h3>
+                <p>User: ${order.userName} (${order.userEmail})</p>
                 <p>Date: ${new Date(order.date).toLocaleDateString()}</p>
                 <p>Address: ${order.shipAddress}, ${order.shipAptNum}, ${order.shipCity}, ${order.shipState}, ${order.shipZip}</p>
                 <p>Items: ${order.items.join(', ')}</p>
             `;
+
             orderHistoryList.appendChild(orderEntry);
         });
     })
+    
     .catch(error => {
         console.error('Error fetching order history:', error);
         alert('Error fetching order history: ' + error.message);
     });
 }
+
 
 
 function displayOrderHistory() {

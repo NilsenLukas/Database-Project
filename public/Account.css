@@ -40,6 +40,23 @@
     color: #333;
 }
 
+.update-info-btn{
+    padding: 10px 20px;
+    background-color: brown; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 0;
+    display: grid;
+    align-items: center;
+
+}
+
+.update-info-btn:hover {
+    background-color: darkred;
+}
+
 .user-info p {
     font-size: 16px;
     line-height: 1.6;
@@ -127,7 +144,7 @@ hr {
     border-radius: 3px;
   }
   
-  input[type=text] {
+  input[type=password], input[type=email], input[type=text] {
     width: 100%;
     margin-bottom: 20px;
     padding: 12px;
@@ -178,7 +195,7 @@ hr {
 
   .btn-checkout {
     padding: 10px 20px;
-    background-color: #4CAF50; /* Green */
+    background-color: brown; 
     color: white;
     border: none;
     border-radius: 5px;

@@ -296,27 +296,35 @@ app.post('/api/checkout', async (req, res) => {
     }
 });
 
-
-
-
-
 app.get('/api/order-history', async (req, res) => {
     if (!req.session.userId) {
         return res.status(401).send('User not logged in');
     }
 
     try {
-        let query = { email: req.session.userId }; // Adjusted for user-specific orders
+        let query = {};
+        const user = await User.findById(req.session.userId);
+        if (user && user.status === 'Admin') {
+            query = {};
+        } else {
+            query = { email: req.session.userId };
+        }
+
         const orders = await Order.find(query)
+            .populate('email', 'email fName lName')
             .populate({
                 path: 'productIDList',
                 populate: { path: 'productID', model: 'Item' }
             })
             .sort({ date: -1 });
 
+        console.log("Populated Orders: ", JSON.stringify(orders, null, 2)); // This will log detailed info including user data
+
         const formattedOrders = orders.map(order => ({
             orderID: order.orderID,
             date: order.date,
+            userName: order.email.fName + ' ' + order.email.lName,
+            userEmail: order.email.email,
             shipAddress: order.shipAddress,
             shipAptNum: order.shipAptNum,
             shipCity: order.shipCity,
@@ -332,7 +340,6 @@ app.get('/api/order-history', async (req, res) => {
         res.status(500).send('Error retrieving order history');
     }
 });
-
 
 app.post('/create-account', async (req, res) => {
     const { email, password, fName, lName } = req.body;
