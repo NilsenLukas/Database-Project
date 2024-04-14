@@ -1,3 +1,7 @@
+//const e = require("express");
+
+//const e = require("express");
+
 document.addEventListener('DOMContentLoaded', () => {
     // Fetch session info to adjust UI accordingly
     fetch('/session-info')
@@ -23,6 +27,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Logout functionality
         document.querySelector('#logout-btn').addEventListener('click', handleLogout);
+
+        /*if (data.isAdmin) {
+            document.querySelector('.admin-page-section').style.display = 'block';
+            document.getElementById('searchUserBtn').addEventListener('click', searchUser);
+            document.getElementById('addItemBtn').addEventListener('click', addItem);
+            document.getElementById('searchItemBtn').addEventListener('click', searchItem);
+        }*/
+
+        if (data.isAdmin) {
+            displayAdminPage();  // This function should display the admin section if the user is an admin
+        }
 
         // Initially show the account info section
         showSection('accountInfo');
@@ -61,8 +76,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 // If cart section is active, fetch and display the cart items
                 displayCart();
             }
+            else if (activeSection === 'orderHistory') {
+                // If order history section is active, fetch and display the order history
+                displayOrderHistory();
+            }
+            else if (activeSection === 'adminPage') {
+                // If admin page section is active, fetch and display the admin page
+                displayAdminPage();
+            }
         }
     }
+
+    function displayAdminPage() {
+        const adminSection = document.querySelector('.admin-page-section');
+        if (adminSection) {
+            // Ensure that the admin section itself is shown
+            adminSection.style.display = 'block';
+            // Explicitly display subsections within the admin section
+            document.querySelectorAll('.admin-section').forEach(section => {
+                section.style.display = 'block';
+            });
+        }
+    }
+    
 
     // Function to fetch and display cart contents (remains unchanged)
     const displayCart = () => {
@@ -143,7 +179,31 @@ fetch('/api/user-info')
     });
 
     // Setup the update information button click event
-    document.getElementById('update-info-btn').addEventListener('click', updateUserInfo);
+    //document.getElementById('update-info-btn').addEventListener('click', updateUserInfo);
+    document.getElementById('update-info-btn').addEventListener('click', () => {
+        const updates = {
+            email: document.getElementById('userEmail').value,
+            fName: document.getElementById('userFName').value,
+            lName: document.getElementById('userLName').value,
+            password: document.getElementById('userPassword').value,
+            status: document.getElementById('userStatus').value
+        };
+    
+        // Send the update request
+        fetch('/api/users/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: updates.email, updates })
+        }).then(response => response.json())
+          .then(data => {
+              console.log(data.message);
+              alert('User updated successfully!');
+          }).catch(error => {
+              console.error('Failed to update user:', error);
+              alert('Failed to update user information.');
+          });
+    });
+    
 })
 .catch(error => console.error('Error fetching user info:', error));
 
@@ -275,44 +335,6 @@ function displayOrderHistory() {
     });
 }
 
-
-
-function displayOrderHistory() {
-    fetch('/api/order-history', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to fetch order history');
-        }
-        return response.json();
-    })
-    .then(orders => {
-        const orderHistoryList = document.getElementById('order-history-list');
-        orderHistoryList.innerHTML = ''; // Clear previous entries
-
-        orders.forEach(order => {
-            const orderEntry = document.createElement('div');
-            orderEntry.className = "order-entry";
-            orderEntry.innerHTML = `
-                <h3>Order ID: ${order.orderID} - ${order.isComplete ? 'Finished' : 'Active'}</h3>
-                <p>Date: ${new Date(order.date).toLocaleDateString()}</p>
-                <p>Address: ${order.shipAddress}, ${order.shipAptNum}, ${order.shipCity}, ${order.shipState}, ${order.shipZip}</p>
-                <p>Items: ${order.items.join(', ')}</p>
-            `;
-            orderHistoryList.appendChild(orderEntry);
-        });
-    })
-    .catch(error => {
-        console.error('Error fetching order history:', error);
-        alert('Error fetching order history: ' + error.message);
-    });
-}
-
-
-
 function showSection(activeSection) {
     const sections = {
         accountInfo: document.querySelector('.account-info-section'),
@@ -332,9 +354,119 @@ function showSection(activeSection) {
         } else if (activeSection === 'orderHistory') {
             displayOrderHistory();  // Load and display the order history
         }
+        else if (activeSection === 'adminPage') {
+            displayAdminPage();  // Load and display the admin page
+        }
     }
 }
 
+document.getElementById('searchUserBtn').addEventListener('click', () => {
+    const email = document.getElementById('searchEmail').value;
+    fetch(`/api/users?email=${email}`)
+        .then(response => response.json())
+        .then(user => {
+            document.getElementById('userEmail').value = user.email;
+            document.getElementById('userFName').value = user.fName;
+            document.getElementById('userLName').value = user.lName;
+            document.getElementById('userPassword').value = user.password;
+            document.getElementById('userStatus').value = user.status;
+            document.getElementById('userDetails').style.display = 'block';
+        })
+        .catch(error => console.error('Error fetching user:', error));
+});
+
+document.getElementById('addItemBtn').addEventListener('click', () => {
+    const productID = document.getElementById('newItemProductID').value;
+    const name = document.getElementById('newItemName').value;
+    const color = document.getElementById('newItemColor').value;
+    const price = document.getElementById('newItemPrice').value;
+    const size = document.getElementById('newItemSize').value;
+    const stock = document.getElementById('newItemStock').value;
+    const description = document.getElementById('newItemDescription').value;
+    const image = document.getElementById('newItemImage').value;
+
+    const item = { productID, name, color, price, size, stock, description, image };
+    fetch('/api/add-item', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(item)
+    })
+        .then(response => response.json())
+        .then(data => alert('Item added successfully'))
+        .catch(error => console.error('Error adding item:', error));
+});
+
+document.getElementById('searchItemBtn').addEventListener('click', () => {
+    const productID = document.getElementById('searchItemID').value;
+    fetch(`/api/items?productID=${productID}`)
+        .then(response => response.json())
+        .then(item => {
+            document.getElementById('updateItemName').value = item.name;
+            document.getElementById('updateItemColor').value = item.color;
+            document.getElementById('updateItemPrice').value = item.price;
+            document.getElementById('updateItemSize').value = item.size;
+            document.getElementById('updateItemStock').value = item.stock;
+            document.getElementById('updateItemDescription').value = item.description;
+            document.getElementById('updateItemImage').value = item.image;
+            document.getElementById('itemDetails').style.display = 'block';
+        })
+        .catch(error => console.error('Error fetching item:', error));
+});
+
+// Event listener for updating user information
+document.getElementById('adminUpdateUserBtn').addEventListener('click', function() {
+    const userEmail = document.getElementById('userEmail').value;
+    const userUpdates = {
+        fName: document.getElementById('userFName').value,
+        lName: document.getElementById('userLName').value,
+        password: document.getElementById('userPassword').value, // Handle with care
+        status: document.getElementById('userStatus').value
+    };
+
+    fetch('/api/users/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: userEmail, updates: userUpdates })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('User updated successfully!');
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Error updating user:', error);
+        alert('Failed to update user information.');
+    });
+});
+
+// Event listener for updating item information
+document.getElementById('adminUpdateItemBtn').addEventListener('click', function() {
+    const productID = document.getElementById('searchItemID').value;
+    const itemUpdates = {
+        name: document.getElementById('updateItemName').value,
+        color: document.getElementById('updateItemColor').value,
+        price: parseFloat(document.getElementById('updateItemPrice').value),
+        size: document.getElementById('updateItemSize').value,
+        stock: parseInt(document.getElementById('updateItemStock').value, 10),
+        description: document.getElementById('updateItemDescription').value,
+        image: document.getElementById('updateItemImage').value
+    };
+
+    fetch('/api/items/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productID: productID, updates: itemUpdates })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Item updated successfully!');
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Error updating item:', error);
+        alert('Failed to update item information.');
+    });
+});
 
 
 });

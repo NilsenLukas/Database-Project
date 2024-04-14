@@ -155,9 +155,68 @@
   </div>
 
     <!-- Admin Page Section (only for admins) -->
-    <div class="admin-page-section" style="display: none">
-      <!-- Content for admin page -->
-    </div>
+<div class="admin-page-section" style="display: none">
+  <h1>Admin Dashboard</h1>
+  <!-- User Management Section -->
+  <div id="admin-user-management" class="admin-section" style="display: none;">
+      <h2>User Management</h2>
+      <div>
+          <label for="searchEmail">Search User by Email:</label>
+          <input type="email" id="searchEmail" placeholder="Enter user email">
+          <button id="searchUserBtn">Search</button>
+      </div>
+      <div id="userDetails" style="display: none;">
+          <h3>User Details</h3>
+          <!-- User details fields will be populated here -->
+          <label>User Email:</label>
+          <input type="text" id="userEmail" placeholder="User Email">
+          <label>User First Name:</label>
+          <input type="text" id="userFName" placeholder="First Name">
+          <label>User Last Name:</label>
+          <input type="text" id="userLName" placeholder="Last Name">
+          <label>User Password:</label>
+          <input type="text" id="userPassword" placeholder="Password">
+          <label>User Status:</label>
+          <input type="text" id="userStatus" placeholder="Status">
+          <button id="adminUpdateUserBtn">Update User</button>
+      </div>
+  </div>
+
+  <!-- Item Management Section -->
+  <div id="item-management" class="admin-section" style="display: none;">
+      <h2>Item Management</h2>
+      <div>
+          <label for="newItemName">Add New Item:</label>
+          <input type="text" id="newItemName" placeholder="Enter new item name">
+          <button id="addItemBtn">Add Item</button>
+      </div>
+      <div>
+          <label for="searchItemID">Update Existing Item:</label>
+          <input type="text" id="searchItemID" placeholder="Enter item ID">
+          <button id="searchItemBtn">Search Item</button>
+      </div>
+      <div id="itemDetails" style="display: none;">
+          <!-- Item details fields will be populated here -->
+          <label>Item Name:</label>
+          <input type="text" id="updateItemName" placeholder="shirt">
+          <label>Item Color:</label>
+          <input type="text" id="updateItemColor" placeholder="yellow">
+          <label>Item Price:</label>
+          <input type="text" id="updateItemPrice" placeholder="$10">
+          <label>Item Size:</label>
+          <input type="text" id="updateItemSize" placeholder="M">
+          <label>Item Stock:</label>
+          <input type="text" id="updateItemStock" placeholder="10">
+          <label>Item Desc:</label>
+          <input type="text" id="updateItemDescription" placeholder="soft">
+          <label>Item IMG:</label>
+          <input type="text" id="updateItemImage" placeholder="Yellow_T.png">
+          <button id="adminUpdateItemBtn">Update Item</button>
+      </div>
+  </div>
+
+  
+</div>
 
     <footer>
       <div id="footer1"></div>

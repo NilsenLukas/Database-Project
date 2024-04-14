@@ -358,6 +358,80 @@ app.post('/create-account', async (req, res) => {
 });
 
 
+// Add an item
+app.post('/api/add-item', async (req, res) => {
+    const { productID, name, color, price, size, stock, description, image } = req.body;
+    try {
+        const newItem = new Item({ productID, name, color, price, size, stock, description, image });
+        await newItem.save();
+        res.status(201).json(newItem);
+    } catch (error) {
+        res.status(500).json({ message: 'Error adding item', error });
+    }
+});
+
+// Get an item by productID
+app.get('/api/items', async (req, res) => {
+    const { productID } = req.query;
+    try {
+        const item = await Item.findOne({ productID });
+        if (!item) {
+            return res.status(404).send('Item not found');
+        }
+        res.json(item);
+    } catch (error) {
+        res.status(500).send('Error fetching item');
+    }
+});
+// Endpoint to update item information
+app.post('/api/items/update', async (req, res) => {
+    const { productID, updates } = req.body;
+    try {
+        const updatedItem = await Item.findOneAndUpdate({ productID }, updates, { new: true });
+        if (!updatedItem) {
+            return res.status(404).send('Item not found');
+        }
+        res.json({ message: 'Item updated successfully', item: updatedItem });
+    } catch (error) {
+        console.error('Error updating item:', error);
+        res.status(500).send('Error updating item information');
+    }
+});
+
+// Get a user by email
+app.get('/api/users', async (req, res) => {
+    const { email } = req.query;
+    if (!email) {
+        return res.status(400).send('Email is required');
+    }
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        res.json(user);
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).send('Error fetching user');
+    }
+});
+
+// Endpoint to update user information
+app.post('/api/users/update', async (req, res) => {
+    const { email, updates } = req.body;
+    try {
+        const updatedUser = await User.findOneAndUpdate({ email }, updates, { new: true });
+        if (!updatedUser) {
+            return res.status(404).send('User not found');
+        }
+        res.json({ message: 'User information updated successfully', user: updatedUser });
+    } catch (error) {
+        console.error('Error updating user information:', error);
+        res.status(500).send('Error updating user information');
+    }
+});
+
+
 app.get('/session-info', (req, res) => {
     if (req.session.userId) {
         res.json({ loggedIn: true, isAdmin: req.session.status === 'Admin' });
