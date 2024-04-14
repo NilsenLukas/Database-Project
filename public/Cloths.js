@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         addToListBox.innerHTML = `<h3>Add to List</h3>`;
 
                         addToListBox.addEventListener('click', () => {
-                            window.location.href = 'AdminPage.html';
+                            window.location.href = 'Account.html?admin=true';
                         });
 
                         clothesContainer.appendChild(addToListBox);
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ productId, quantity: 1 }) // Assuming quantity is 1 for simplicity
+                    body: JSON.stringify({ productId, quantity: 1 }) // quantity is 1 for now (plan to fix later)
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return response.json();
                 })
                 .then(data => {
-                    console.log(data.message); // Assuming the server sends back a confirmation message
+                    console.log(data.message); // server sends back a confirmation message
                     alert('Item added to cart');
                     // Optionally update the cart display here
                 })

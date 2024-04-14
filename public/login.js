@@ -6,8 +6,6 @@ function setFormMesage(formElement, type, message){
     messageElement.classList.remove("form__message--success", "form__message--error");
     messageElement.classList.add(`form__message--${type}`);
 }
-//how the above function works
-//setFormMesage(loginForm, "success", "You're logged in!");
 
 function setInputError(inputElement, message){
     inputElement.classList.add("form__input--error");
@@ -114,8 +112,6 @@ document.addEventListener("DOMContentLoaded", () =>{
             if ((e.target.id === "loginEmail" || e.target.id === "signUpEmail") && e.target.value.length > 0 && !emailRegex.test(e.target.value)){
                 setInputError(inputElement, "Must enter a valid email address")
             }
-
-            
         });
         inputElement.addEventListener("input", e=>{
             clearImputError(inputElement);

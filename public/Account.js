@@ -1,8 +1,6 @@
-//const e = require("express");
-
-//const e = require("express");
-
 document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isAdminPageRequested = urlParams.get('admin') === 'true';
     // Fetch session info to adjust UI accordingly
     fetch('/session-info')
     .then(response => response.json())
@@ -36,11 +34,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }*/
 
         if (data.isAdmin) {
-            displayAdminPage();  // This function should display the admin section if the user is an admin
+            displayAdminPage();  // Ensure admin sections are displayed if the user is an admin
+            if (isAdminPageRequested) {
+                showSection('adminPage');  // Directly show the admin page if requested
+            } else {
+                showSection('accountInfo');  // Default section to show
+            }
         }
 
         // Initially show the account info section
-        showSection('accountInfo');
+        //showSection('accountInfo');
     })
     .catch(error => console.error('Error fetching session info:', error));
 
@@ -102,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to fetch and display cart contents (remains unchanged)
     const displayCart = () => {
+        const cartItemsContainer = document.querySelector('.cart-items-container');
         fetch('/api/current-cart')
         .then(response => {
             if (!response.ok) {
@@ -110,50 +114,64 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(cartItems => {
+            // Make sure cartItemsContainer is correctly defined here
             const cartItemsContainer = document.querySelector('.cart-items-container');
+            if (!cartItemsContainer) {
+                console.error('Cart items container not found');
+                return; // Exit if the container does not exist
+            }
+    
             cartItemsContainer.innerHTML = ''; // Clear existing items
-            let total = 0;
-            cartItems.forEach(item => {
-                // Ensure each item includes a populated productID with name and price
-                const itemHtml = `
-                    <div class="cart-item">
-                        <span class="remove-item-btn" data-order-item-id="${item._id}">X</span>
-                        <p>${item.productID.name} - $${item.productID.price} x ${item.quantity}</p>
-                    </div>
-                `;
-                cartItemsContainer.innerHTML += itemHtml;
-                total += item.productID.price * item.quantity;
-            });
     
-            // Update total price
-            document.querySelector('.cart-section .price b').textContent = `$${total.toFixed(2)}`;
-    
-            // Attach event listeners to the "X" buttons after items have been added
-            document.querySelectorAll('.remove-item-btn').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    // Prevent the event from bubbling to higher-level elements
-                    e.stopPropagation();
-                    const orderItemId = e.target.getAttribute('data-order-item-id');
-                    if (orderItemId) {
-                        fetch(`/api/remove-from-cart/${orderItemId}`, {
-                            method: 'DELETE'
-                        })
-                        .then(response => {
-                            if (response.ok) {
-                                displayCart(); // Re-fetch and display the updated cart
-                            } else {
-                                console.error('Failed to remove item from cart');
-                            }
-                        })
-                        .catch(error => console.error('Error removing item from cart:', error));
-                    }
+            if (cartItems.length === 0 || cartItems.error) {
+                cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+            } else {
+                let total = 0;
+                cartItems.forEach(item => {
+                    const itemHtml = `
+                        <div class="cart-item">
+                            <span class="remove-item-btn" data-order-item-id="${item._id}">X</span>
+                            <p>${item.productID.name} - $${item.productID.price} x ${item.quantity}</p>
+                        </div>
+                    `;
+                    cartItemsContainer.innerHTML += itemHtml;
+                    total += item.productID.price * item.quantity;
                 });
-            });
+    
+                // Update total price
+                document.querySelector('.cart-section .price b').textContent = `$${total.toFixed(2)}`;
+    
+                // Attach event listeners to the "X" buttons after items have been added
+                document.querySelectorAll('.remove-item-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const orderItemId = e.target.getAttribute('data-order-item-id');
+                        if (orderItemId) {
+                            fetch(`/api/remove-from-cart/${orderItemId}`, {
+                                method: 'DELETE'
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    displayCart(); // Re-fetch and display the updated cart
+                                } else {
+                                    console.error('Failed to remove item from cart');
+                                }
+                            })
+                            .catch(error => console.error('Error removing item from cart:', error));
+                        }
+                    });
+                });
+            }
         })
         .catch(error => {
             console.error('Error fetching cart:', error);
+            // Make sure to check if cartItemsContainer exists before attempting to update its innerHTML
+            if (cartItemsContainer) {
+                cartItemsContainer.innerHTML = '<p>Error fetching cart. Please try again later.</p>';
+            }
         });
     };
+    
+    
     
 
 
@@ -266,8 +284,9 @@ function showMessage(message, type) {
     }, 4000);
 }
 
+
 document.getElementById('checkout-form').addEventListener('submit', function(e) {
-    e.preventDefault();  // Prevent the default form submission
+    e.preventDefault();  
 
     var formData = {
         shipAddress: document.querySelector('[name="shipAddress"]').value,
@@ -282,21 +301,20 @@ document.getElementById('checkout-form').addEventListener('submit', function(e) 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
     })
-    .then(response => {
-        if (!response.ok) throw new Error('Checkout failed');
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        alert('Checkout successful!');
-        window.location.reload();
+        if (data.message.startsWith("Not enough stock for items")) {
+            alert(data.message);  // Alert the user which items are out of stock
+        } else {
+            alert('Checkout successful!');
+            window.location.reload();
+        }
     })
     .catch(error => {
         console.error('Error during checkout:', error);
         alert('Checkout failed. Please try again.');
     });
 });
-
-
 
 function displayOrderHistory() {
     fetch('/api/order-history', {
@@ -311,27 +329,29 @@ function displayOrderHistory() {
         return response.json();
     })
     .then(orders => {
-        console.log("Received orders: ", orders);
         const orderHistoryList = document.getElementById('order-history-list');
         orderHistoryList.innerHTML = '';
-        orders.forEach(order => {
-            const orderEntry = document.createElement('div');
-            orderEntry.className = "order-entry";
-            orderEntry.innerHTML = `
-                <h3>Order ID: ${order.orderID} - ${order.isComplete ? 'Finished' : 'Active'}</h3>
-                <p>User: ${order.userName} (${order.userEmail})</p>
-                <p>Date: ${new Date(order.date).toLocaleDateString()}</p>
-                <p>Address: ${order.shipAddress}, ${order.shipAptNum}, ${order.shipCity}, ${order.shipState}, ${order.shipZip}</p>
-                <p>Items: ${order.items.join(', ')}</p>
-            `;
+        if (orders.length === 0) {
+            orderHistoryList.innerHTML = '<p>This user has no order history.</p>';
+        } else {
+            orders.forEach(order => {
+                const orderEntry = document.createElement('div');
+                orderEntry.className = "order-entry";
+                orderEntry.innerHTML = `
+                    <h3>Order ID: ${order.orderID} - ${order.isComplete ? 'Finished' : 'Active'}</h3>
+                    <p>User: ${order.userName} (${order.userEmail})</p>
+                    <p>Date: ${new Date(order.date).toLocaleDateString()}</p>
+                    <p>Address: ${order.shipAddress}, ${order.shipAptNum}, ${order.shipCity}, ${order.shipState}, ${order.shipZip}</p>
+                    <p>Items: ${order.items.join(', ')}</p>
+                `;
 
-            orderHistoryList.appendChild(orderEntry);
-        });
+                orderHistoryList.appendChild(orderEntry);
+            });
+        }
     })
-    
     .catch(error => {
         console.error('Error fetching order history:', error);
-        alert('Error fetching order history: ' + error.message);
+        orderHistoryList.innerHTML = '<p>Error fetching order history. Please try again later.</p>';
     });
 }
 
@@ -395,6 +415,7 @@ document.getElementById('addItemBtn').addEventListener('click', () => {
         .then(data => alert('Item added successfully'))
         .catch(error => console.error('Error adding item:', error));
 });
+
 
 document.getElementById('searchItemBtn').addEventListener('click', () => {
     const productID = document.getElementById('searchItemID').value;
@@ -467,6 +488,33 @@ document.getElementById('adminUpdateItemBtn').addEventListener('click', function
         alert('Failed to update item information.');
     });
 });
+
+document.getElementById('deleteUserBtn').addEventListener('click', function() {
+    const email = document.getElementById('deleteUserEmail').value;
+    fetch(`/api/users/delete?email=${email}`, { method: 'DELETE' })
+      .then(response => {
+        if (response.ok) {
+          alert('User deleted successfully');
+        } else {
+          alert('Failed to delete user');
+        }
+      })
+      .catch(error => alert('Error deleting user: ' + error));
+  });
+  
+  document.getElementById('deleteItemBtn').addEventListener('click', function() {
+    const productID = document.getElementById('deleteItemProductID').value;
+    fetch(`/api/items/delete?productID=${productID}`, { method: 'DELETE' })
+      .then(response => {
+        if (response.ok) {
+          alert('Item deleted successfully');
+        } else {
+          alert('Failed to delete item');
+        }
+      })
+      .catch(error => alert('Error deleting item: ' + error));
+  });
+
 
 
 });

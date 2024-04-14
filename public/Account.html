@@ -28,69 +28,111 @@
     </div>
 
     <!-- Account Info Section -->
-<div class="account-info-section" style="display: none">
-  <h2>Account Information</h2>
-  <label>Email:</label>
-  <input type="email" id="email" disabled>
-  <label>First Name:</label>
-  <input type="text" id="fName">
-  <label>Last Name:</label>
-  <input type="text" id="lName">
-  <label>Address:</label>
-  <input type="text" id="address">
-  <label>Apartment Number:</label>
-  <input type="text" id="aptNum">
-  <label>City:</label>
-  <input type="text" id="city">
-  <label>State:</label>
-  <input type="text" id="state">
-  <label>Zip Code:</label>
-  <input type="text" id="zip">
-  <label>Password (new or change):</label>
-  <input type="password" id="password">
-  <button class="update-info-btn" id="update-info-btn" style="display:none;">Update Information</button>
-</div>
+    <div class="account-info-section" style="display: none">
+      <h2>Account Information</h2>
+      <label>Email:</label>
+      <input type="email" id="email" disabled />
+      <label>First Name:</label>
+      <input type="text" id="fName" />
+      <label>Last Name:</label>
+      <input type="text" id="lName" />
+      <label>Address:</label>
+      <input type="text" id="address" />
+      <label>Apartment Number:</label>
+      <input type="text" id="aptNum" />
+      <label>City:</label>
+      <input type="text" id="city" />
+      <label>State:</label>
+      <input type="text" id="state" />
+      <label>Zip Code:</label>
+      <input type="text" id="zip" />
+      <label>Password (new or change):</label>
+      <input type="password" id="password" />
+      <button
+        class="update-info-btn"
+        id="update-info-btn"
+        style="display: none"
+      >
+        Update Information
+      </button>
+    </div>
 
     <!-- Cart Section -->
     <div class="cart-section" style="display: none">
       <h2 class="bannerCO1">Your Cart</h2>
       <div class="containerCart">
-        <!-- Cart items will be dynamically added here -->
-        <div class="cart-items-container"></div>
+        <div class="cart-items-container">
+          <!-- Cart items will be dynamically inserted here -->
+        </div>
         <hr />
         <p>
           Total: <span class="price" style="color: black"><b>$0</b></span>
         </p>
-        
       </div>
 
       <div class="row">
         <div class="col-75">
           <div class="container">
-            
-              <div class="row">
-                <div class="col-50">
-                  <h3>Billing Address</h3>
-                  <form id="checkout-form">
-                    <label for="shipFName"><i class="fa fa-user"></i> First name</label>
-                    <input type="text" name="shipFName" placeholder="Adam" required>
-                    <label for="shipLName"><i class="fa fa-user"></i> Last name</label>
-                    <input type="text" name="shipLName" placeholder="Adam" required>
-                    <label for="shipAddress"><i class="fa fa-user"></i> Address:</label>
-                    <input type="text" name="shipAddress" placeholder="1234 Main St" required>
-                    <label for="shipAptNum"><i class="fa fa-envelope"></i> Apt Number </label>
-                    <input type="text" name="shipAptNum" placeholder="Apt 101">
-                    <label for="shipCity"><i class="fa fa-address-card-o"></i> City</label>
-                    <input type="text" name="shipCity" placeholder="New York" required>
-                    <label for="shipState"><i class="fa fa-address-card-o"></i> State</label>
-                    <input type="text" name="shipState" placeholder="NY" required>
-                    <label for="shipZip"><i class="fa fa-address-card-o"></i> Zipcode</label>
-                    <input type="text" name="shipZip" placeholder="10001" required>
-                    <button class="btn-checkout" type="submit" id="checkout-button">Checkout</button>
-                  </div>
-                </div>
-  
-                <!--
+            <div class="row">
+              <div class="col-50">
+                <h3>Billing Address</h3>
+                <form id="checkout-form">
+                  <label><i class="fa fa-user"></i> First name</label>
+                  <input
+                    type="text"
+                    name="shipFName"
+                    placeholder="Adam"
+                    required
+                  />
+                  <label><i class="fa fa-user"></i> Last name</label>
+                  <input
+                    type="text"
+                    name="shipLName"
+                    placeholder="Adam"
+                    required
+                  />
+                  <label><i class="fa fa-user"></i> Address:</label>
+                  <input
+                    type="text"
+                    name="shipAddress"
+                    placeholder="1234 Main St"
+                    required
+                  />
+                  <label><i class="fa fa-envelope"></i> Apt Number </label>
+                  <input type="text" name="shipAptNum" placeholder="Apt 101" />
+                  <label><i class="fa fa-address-card-o"></i> City</label>
+                  <input
+                    type="text"
+                    name="shipCity"
+                    placeholder="New York"
+                    required
+                  />
+                  <label><i class="fa fa-address-card-o"></i> State</label>
+                  <input
+                    type="text"
+                    name="shipState"
+                    placeholder="NY"
+                    required
+                  />
+                  <label><i class="fa fa-address-card-o"></i> Zipcode</label>
+                  <input
+                    type="text"
+                    name="shipZip"
+                    placeholder="10001"
+                    required
+                  />
+                  <button
+                    class="btn-checkout"
+                    type="submit"
+                    id="checkout-button"
+                  >
+                    Checkout
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!--
                 <div class="col-50">
                   <h3>Payment</h3>
                   <label for="fname">Accepted Cards</label>
@@ -138,85 +180,119 @@
                   </div>
                 </div>
               -->
-              </div>
-            
           </div>
         </div>
-
-
+      </div>
     </div>
 
     <!-- Order History Section -->
-    <div class="order-history-section" style="display:none;">
+    <div class="order-history-section" style="display: none">
       <h2>Order History</h2>
       <div id="order-history-list">
-          <!-- Order entries will be populated here dynamically -->
+        <!-- Order entries will be populated here dynamically -->
       </div>
-  </div>
+    </div>
 
     <!-- Admin Page Section (only for admins) -->
-<div class="admin-page-section" style="display: none">
-  <h1>Admin Dashboard</h1>
-  <!-- User Management Section -->
-  <div id="admin-user-management" class="admin-section" style="display: none;">
-      <h2>User Management</h2>
-      <div>
+    <div class="admin-page-section" style="display: none">
+      <h1>Admin Dashboard</h1>
+      <!-- User Management Section -->
+      <div
+        id="admin-user-management"
+        class="admin-section"
+        style="display: none"
+      >
+        <h2>User Management</h2>
+        <div>
           <label for="searchEmail">Search User by Email:</label>
-          <input type="email" id="searchEmail" placeholder="Enter user email">
+          <input type="email" id="searchEmail" placeholder="Enter user email" />
           <button id="searchUserBtn">Search</button>
-      </div>
-      <div id="userDetails" style="display: none;">
+        </div>
+        <div id="userDetails" style="display: none">
           <h3>User Details</h3>
           <!-- User details fields will be populated here -->
           <label>User Email:</label>
-          <input type="text" id="userEmail" placeholder="User Email">
+          <input type="text" id="userEmail" placeholder="User Email" />
           <label>User First Name:</label>
-          <input type="text" id="userFName" placeholder="First Name">
+          <input type="text" id="userFName" placeholder="First Name" />
           <label>User Last Name:</label>
-          <input type="text" id="userLName" placeholder="Last Name">
+          <input type="text" id="userLName" placeholder="Last Name" />
           <label>User Password:</label>
-          <input type="text" id="userPassword" placeholder="Password">
+          <input type="text" id="userPassword" placeholder="Password" />
           <label>User Status:</label>
-          <input type="text" id="userStatus" placeholder="Status">
+          <input type="text" id="userStatus" placeholder="Status" />
           <button id="adminUpdateUserBtn">Update User</button>
+        </div>
       </div>
-  </div>
 
-  <!-- Item Management Section -->
-  <div id="item-management" class="admin-section" style="display: none;">
-      <h2>Item Management</h2>
+      <!-- Delete User Section -->
       <div>
+        <h3>Delete User</h3>
+        <label>Enter User Email</label>
+        <input type="email" id="deleteUserEmail" />
+        <button id="deleteUserBtn">Delete User</button>
+      </div>
+
+      <!-- Item Management Section -->
+      <div id="item-management" class="admin-section" style="display: none">
+        <h2>Item Management</h2>
+        <div>
           <label for="newItemName">Add New Item:</label>
-          <input type="text" id="newItemName" placeholder="Enter new item name">
+
+          <input
+            type="text"
+            id="newItemProductID"
+            placeholder="Enter Product ID"
+          />
+          <input type="text" id="newItemName" placeholder="Enter Item Name" />
+          <input type="text" id="newItemColor" placeholder="Enter Color" />
+          <input type="text" id="newItemPrice" placeholder="Enter Price" />
+          <input type="text" id="newItemSize" placeholder="Enter Size" />
+          <input
+            type="text"
+            id="newItemStock"
+            placeholder="Enter Stock Quantity"
+          />
+          <input
+            type="text"
+            id="newItemDescription"
+            placeholder="Enter Description"
+          />
+          <input type="text" id="newItemImage" placeholder="Enter Image URL" />
           <button id="addItemBtn">Add Item</button>
-      </div>
-      <div>
+        </div>
+        <div>
           <label for="searchItemID">Update Existing Item:</label>
-          <input type="text" id="searchItemID" placeholder="Enter item ID">
+          <input type="text" id="searchItemID" placeholder="Enter item ID" />
           <button id="searchItemBtn">Search Item</button>
-      </div>
-      <div id="itemDetails" style="display: none;">
+        </div>
+        <div id="itemDetails" style="display: none">
           <!-- Item details fields will be populated here -->
           <label>Item Name:</label>
-          <input type="text" id="updateItemName" placeholder="shirt">
+          <input type="text" id="updateItemName" placeholder="shirt" />
           <label>Item Color:</label>
-          <input type="text" id="updateItemColor" placeholder="yellow">
+          <input type="text" id="updateItemColor" placeholder="yellow" />
           <label>Item Price:</label>
-          <input type="text" id="updateItemPrice" placeholder="$10">
+          <input type="text" id="updateItemPrice" placeholder="$10" />
           <label>Item Size:</label>
-          <input type="text" id="updateItemSize" placeholder="M">
+          <input type="text" id="updateItemSize" placeholder="M" />
           <label>Item Stock:</label>
-          <input type="text" id="updateItemStock" placeholder="10">
+          <input type="text" id="updateItemStock" placeholder="10" />
           <label>Item Desc:</label>
-          <input type="text" id="updateItemDescription" placeholder="soft">
+          <input type="text" id="updateItemDescription" placeholder="soft" />
           <label>Item IMG:</label>
-          <input type="text" id="updateItemImage" placeholder="Yellow_T.png">
+          <input type="text" id="updateItemImage" placeholder="Yellow_T.png" />
           <button id="adminUpdateItemBtn">Update Item</button>
+        </div>
+        <!-- Delete Item Section -->
+        <div>
+          <h3>Delete Item</h3>
+          <label>Enter Item ID</label>
+          <input type="text" id="deleteItemProductID" />
+          <button id="deleteItemBtn">Delete Item</button>
+        </div>
       </div>
-  </div>
-
-  
-</div>
+    </div>
 
     <footer>
       <div id="footer1"></div>

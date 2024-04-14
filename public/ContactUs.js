@@ -28,7 +28,7 @@ function sendEmail(){
             }
         }
     );
-    console.log('testing1');
+    //console.log('testing1');
 }
 
 function checkError(){

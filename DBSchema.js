@@ -178,6 +178,11 @@ async function removeOrder(orderID){
 
 //removeOrder('2');
 
+// mydatabase.Item.updateMany(
+//     { "stock": { $type: "string" } },
+//     [{ $set: { "stock": { $toInt: "$stock" } } }]
+// );
+
 module.exports = {
     User, 
     Item,

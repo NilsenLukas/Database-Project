@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('/session-info')
         .then(response => response.json())
         .then(data => {
-            const navbar = document.querySelector('.navbar'); // Ensure this selector targets your navbar element
+            const navbar = document.querySelector('.navbar'); 
 
             let linksHtml = `
                 <a href="Cloths.html">Clothes</a>
@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.loggedIn) {
                 // If logged in, add Account and Logout links
                 linksHtml += `<a href="Account.html">Account</a>`;
-                //linksHtml += `<a href="#" id="logout-link">Logout</a>`;
             } else {
                 // If not logged in, show Login/Signup link
                 linksHtml += `<a href="login.html">Login / Signup</a>`;

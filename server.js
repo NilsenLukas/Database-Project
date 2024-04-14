@@ -265,36 +265,81 @@ app.post('/api/update-user-info', async (req, res) => {
 });
 
 app.post('/api/checkout', async (req, res) => {
+    const { shipAddress, shipAptNum, shipCity, shipState, shipZip } = req.body;
     if (!req.session.userId) {
         return res.status(401).send('User not logged in');
     }
 
-    const { shipAddress, shipAptNum, shipCity, shipState, shipZip } = req.body;
-
     try {
-        const updatedOrder = await Order.findOneAndUpdate(
-            { email: req.session.userId, isComplete: false },
-            {
-                shipAddress,
-                shipAptNum,
-                shipCity,
-                shipState,
-                shipZip,
-                isComplete: true 
-            },
-            { new: true }
-        );
+        // Find the user's cart (assuming it's not complete)
+        const cart = await Order.findOne({ email: req.session.userId, isComplete: false })
+            .populate({
+                path: 'productIDList',
+                populate: { path: 'productID', model: 'Item' }
+            });
 
-        if (!updatedOrder) {
+        if (!cart) {
             return res.status(404).send('No active cart found');
         }
 
-        res.json({ message: 'Checkout successful', order: updatedOrder });
+        // Check if all items are in stock and collect items that are not
+        const outOfStockItems = cart.productIDList.filter(item => item.productID.stock < item.quantity);
+
+        if (outOfStockItems.length > 0) {
+            // Send back a message with the names of out of stock items
+            const outOfStockNames = outOfStockItems.map(item => item.productID.name).join(", ");
+            return res.status(400).json({ message: `Not enough stock for items: ${outOfStockNames}` });
+        }
+
+        // If all items are in stock, decrement the stock
+        await Promise.all(cart.productIDList.map(async (item) => {
+            await Item.findByIdAndUpdate(item.productID._id, { $inc: { stock: -item.quantity } });
+        }));
+
+        // Update the cart with shipping information and mark it as complete
+        cart.shipAddress = shipAddress;
+        cart.shipAptNum = shipAptNum;
+        cart.shipCity = shipCity;
+        cart.shipState = shipState;
+        cart.shipZip = shipZip;
+        cart.isComplete = true;
+        await cart.save();
+
+        res.json({ message: 'Checkout successful' });
     } catch (error) {
         console.error('Error during checkout:', error);
         res.status(500).send('Error during checkout');
     }
 });
+
+// Delete a user
+app.delete('/api/users/delete', async (req, res) => {
+    const { email } = req.query;
+    try {
+      const result = await User.deleteOne({ email });
+      if (result.deletedCount === 0) {
+        return res.status(404).send('User not found');
+      }
+      res.send('User deleted successfully');
+    } catch (error) {
+      res.status(500).send('Error deleting user');
+    }
+  });
+  
+  // Delete an item
+  app.delete('/api/items/delete', async (req, res) => {
+    const { productID } = req.query;
+    try {
+      const result = await Item.deleteOne({ productID });
+      if (result.deletedCount === 0) {
+        return res.status(404).send('Item not found');
+      }
+      res.send('Item deleted successfully');
+    } catch (error) {
+      res.status(500).send('Error deleting item');
+    }
+  });  
+
 
 app.get('/api/order-history', async (req, res) => {
     if (!req.session.userId) {
@@ -384,8 +429,31 @@ app.get('/api/items', async (req, res) => {
     }
 });
 // Endpoint to update item information
+app.post('/api/add-item', async (req, res) => {
+    const { productID, name, color, price, size, stock, description, image } = req.body;
+    try {
+        const newItem = new Item({
+            productID,
+            name,
+            color,
+            price,
+            size,
+            stock: parseInt(stock, 10),  // Ensure stock is stored as an integer
+            description,
+            image
+        });
+        await newItem.save();
+        res.status(201).json(newItem);
+    } catch (error) {
+        res.status(500).json({ message: 'Error adding item', error });
+    }
+});
+
 app.post('/api/items/update', async (req, res) => {
     const { productID, updates } = req.body;
+    if (updates.stock) {
+        updates.stock = parseInt(updates.stock, 10);  // Convert stock to integer if present
+    }
     try {
         const updatedItem = await Item.findOneAndUpdate({ productID }, updates, { new: true });
         if (!updatedItem) {
