@@ -101,10 +101,10 @@ document.addEventListener("DOMContentLoaded", () =>{
     document.querySelectorAll(".form__input").forEach(inputElement =>{
         inputElement.addEventListener("blur", e =>{
             if (e.target.id === "signUpPassword" && e.target.value.length > 0 && e.target.value.length < 8){
-                setInputError(inputElement, "Password must be atlease 8 characters")
+                setInputError(inputElement, "Password must be at least 8 characters")
             }
             if (e.target.id === "signUpConfirmPassword" && e.target.value.length > 0 && e.target.value.length < 8){
-                setInputError(inputElement, "Password must be atlease 8 characters")
+                setInputError(inputElement, "Password must be at least 8 characters")
             }
 
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
