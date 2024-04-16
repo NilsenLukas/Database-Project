@@ -490,15 +490,14 @@ app.post('/api/users/update', async (req, res) => {
     try {
         const updatedUser = await User.findOneAndUpdate({ email }, updates, { new: true });
         if (!updatedUser) {
-            return res.status(404).send('User not found');
+            return res.status(404).json({ message: 'User not found' });
         }
         res.json({ message: 'User information updated successfully', user: updatedUser });
     } catch (error) {
         console.error('Error updating user information:', error);
-        res.status(500).send('Error updating user information');
+        res.status(500).json({ message: 'Error updating user information', error: error.message });
     }
 });
-
 
 app.get('/session-info', (req, res) => {
     if (req.session.userId) {

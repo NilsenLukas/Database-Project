@@ -197,14 +197,17 @@ fetch('/api/user-info')
     });
 
     // Setup the update information button click event
-    //document.getElementById('update-info-btn').addEventListener('click', updateUserInfo);
-    document.getElementById('update-info-btn').addEventListener('click', () => {
+    document.getElementById('update-info-btn').addEventListener('click', updateUserInfo);
+    /*document.getElementById('update-info-btn').addEventListener('click', () => {
         const updates = {
-            email: document.getElementById('userEmail').value,
-            fName: document.getElementById('userFName').value,
-            lName: document.getElementById('userLName').value,
-            password: document.getElementById('userPassword').value,
-            status: document.getElementById('userStatus').value
+            fName: document.getElementById('fName').value.trim(),
+        lName: document.getElementById('lName').value.trim(),
+        address: document.getElementById('address').value.trim(),
+        aptNum: document.getElementById('aptNum').value.trim(),
+        city: document.getElementById('city').value.trim(),
+        state: document.getElementById('state').value.trim(),
+        zip: document.getElementById('zip').value.trim(),
+        password: document.getElementById('password').value
         };
     
         // Send the update request
@@ -220,7 +223,7 @@ fetch('/api/user-info')
               console.error('Failed to update user:', error);
               alert('Failed to update user information.');
           });
-    });
+    });*/
     
 })
 .catch(error => console.error('Error fetching user info:', error));
@@ -248,41 +251,36 @@ function updateUserInfo() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userInfo)
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok.');
-        }
-        return response.json();
-    })
+    .then(response => response.json()) // Ensure the response is parsed as JSON first
     .then(data => {
-        // Display a success message
-        showMessage('Information updated successfully', 'success');
-        document.getElementById('update-info-btn').style.display = 'none'; // Hide the update button after successful update
+        // Check if the operation was successful, not by throwing errors
+        if (data.success) {
+            showMessage('Information updated successfully', 'success');
+            document.getElementById('update-info-btn').style.display = 'none'; // Optionally hide the update button after successful update
+        } else {
+            // Properly handle the server response when it's not successful
+            showMessage(data.message || 'Failed to update information', 'error');
+        }
     })
     .catch(error => {
+        // Handle actual errors that occur during fetch or due to network issues
         console.error('Error updating user info:', error);
-        // Display an error message
-        showMessage('Failed to update information', 'error');
+        showMessage('Error updating user information: ' + error.message, 'error');
     });
 }
 
+
 function showMessage(message, type) {
-    const messageContainer = document.querySelector('.message-container');
+    const messageContainer = document.getElementById('message-container');
     if (!messageContainer) {
         console.error('Message container not found');
-        return;
+        return; 
     }
-    const messageElement = document.createElement('div');
-    messageElement.textContent = message;
-    messageElement.className = `alert alert-${type}`; // Assuming Bootstrap or similar for styling
-    messageContainer.innerHTML = ''; // Clear previous messages
-    messageContainer.appendChild(messageElement);
-
-    // Automatically remove the message after 4 seconds
-    setTimeout(() => {
-        messageElement.remove();
-    }, 4000);
+    messageContainer.textContent = message; 
+    messageContainer.className = type === 'success' ? 'success' : 'error';
+    messageContainer.style.display = 'block'; 
 }
+
 
 
 document.getElementById('checkout-form').addEventListener('submit', function(e) {
