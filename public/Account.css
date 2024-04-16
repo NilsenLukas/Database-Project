@@ -5,7 +5,9 @@
     justify-content: center;
     align-items: center;
 }
-
+.message-container{
+    color: green;
+}
 .account-option {
     
     
