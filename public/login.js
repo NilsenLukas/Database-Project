@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () =>{
 
             if (response.ok){
                 setFormMesage(loginForm, "success", "Login successful");
-                window.location.href = 'ApparelSite.html';
+                window.location.href = 'AboutUs.html';
             } else{
                 throw new Error(data.message);
             }
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () =>{
 
             if (response.ok){
                 setFormMesage(createAccountForm, "success", data.message);
-                window.location.href = 'ApparelSite.html';
+                window.location.href = 'AboutUs.html';
             }
             else{
                 throw new Error(data.message);
