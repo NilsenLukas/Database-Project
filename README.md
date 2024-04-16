@@ -1,4 +1,5 @@
 # Database-Project
+
 Project made by Andrew, Lukas, Jared, Bilal.
 
 The domain that we are going to use is the online apparel retail space, for the brand "FaithNFabrics." This will include different aspects of an e-commerce platform dedicated to selling clothing items.
@@ -11,5 +12,9 @@ We do not think the need for any special software or hardware beyond standard we
 There are two different ways to run the website.
 
 1. By using server.js to run a local host at a certian port. You can download the zip file on vscode and inside the vscode terminal you must run "node server.js" where that will run the server and you can go to the localhost and port that it gives you. If you do not have node you must downlaod it to run on your vscode.
+
+   • To be able to run the local server on your vs code, you must have node.js, mongoose.js, and express.js installed.
+
+   • You must also be a member of the mongodb database and have your ip varrified.
 
 2. A simple website link will also be added that will take you directly to the website.
