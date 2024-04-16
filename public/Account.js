@@ -336,7 +336,7 @@ function displayOrderHistory() {
                 const orderEntry = document.createElement('div');
                 orderEntry.className = "order-entry";
                 orderEntry.innerHTML = `
-                    <h3>Order ID: ${order.orderID} <!--- ${order.isComplete ? 'Finished' : 'Active'}--></h3>
+                    <h3>Order ID: ${order.orderID}</h3>
                     <p>User: ${order.userName} (${order.userEmail})</p>
                     <p>Date: ${new Date(order.date).toLocaleDateString()}</p>
                     <p>Address: ${order.shipAddress}, ${order.shipAptNum}, ${order.shipCity}, ${order.shipState}, ${order.shipZip}</p>
@@ -352,6 +352,7 @@ function displayOrderHistory() {
         orderHistoryList.innerHTML = '<p>Error fetching order history. Please try again later.</p>';
     });
 }
+
 
 function showSection(activeSection) {
     const sections = {

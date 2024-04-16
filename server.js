@@ -341,7 +341,7 @@ app.delete('/api/users/delete', async (req, res) => {
   });  
 
 
-app.get('/api/order-history', async (req, res) => {
+  app.get('/api/order-history', async (req, res) => {
     if (!req.session.userId) {
         return res.status(401).send('User not logged in');
     }
@@ -356,35 +356,48 @@ app.get('/api/order-history', async (req, res) => {
         }
 
         const orders = await Order.find(query)
-            .populate('email', 'email fName lName')
+            .populate({
+                path: 'email', // Correct path assuming 'email' is the reference to User
+                select: 'email fName lName' // Ensuring only these fields are selected
+            })
             .populate({
                 path: 'productIDList',
                 populate: { path: 'productID', model: 'Item' }
             })
             .sort({ date: -1 });
 
-        console.log("Populated Orders: ", JSON.stringify(orders, null, 2)); // This will log detailed info including user data
+        // Debug: Log one sample to see what's in 'email'
+        if (orders.length > 0) {
+            console.log("Sample user data:", orders[0].email);
+        }
 
-        const formattedOrders = orders.map(order => ({
-            orderID: order.orderID,
-            date: order.date,
-            userName: order.email.fName + ' ' + order.email.lName,
-            userEmail: order.email.email,
-            shipAddress: order.shipAddress,
-            shipAptNum: order.shipAptNum,
-            shipCity: order.shipCity,
-            shipState: order.shipState,
-            shipZip: order.shipZip,
-            isComplete: order.isComplete ? 'Finished' : 'Active',
-            items: order.productIDList.map(item => `${item.productID.name} (x${item.quantity})`)
-        }));
+        const formattedOrders = orders.map(order => {
+            // Handling potential null values
+            const userName = order.email ? `${order.email.fName} ${order.email.lName}` : 'User not found';
+            const userEmail = order.email ? order.email.email : 'No email';
+
+            return {
+                orderID: order.orderID,
+                date: order.date,
+                userName: userName,
+                userEmail: userEmail,
+                shipAddress: order.shipAddress,
+                shipAptNum: order.shipAptNum,
+                shipCity: order.shipCity,
+                shipState: order.shipState,
+                shipZip: order.shipZip,
+                isComplete: order.isComplete ? 'Finished' : 'Active',
+                items: order.productIDList.map(item => item.productID ? `${item.productID.name} (x${item.quantity})` : 'Item has been deleted')
+            };
+        });
 
         res.json(formattedOrders);
-    } catch (error) {
+    } catch ( error) {
         console.error('Error retrieving order history:', error);
         res.status(500).send('Error retrieving order history');
     }
 });
+
 
 app.post('/create-account', async (req, res) => {
     const { email, password, fName, lName } = req.body;
